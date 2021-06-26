@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
-import 'favoriate_bikes.dart';
+import 'favorite_bikes.dart';
 import 'store_bike.dart';
 
 class Home extends StatefulWidget {
@@ -21,8 +21,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     controllerAnim = new AnimationController(
-        duration: Duration(milliseconds: 250), vsync: this);
-    // ..addListener(() => setState(() {}));
+      duration: Duration(milliseconds: 250),
+      vsync: this,
+    );
     animation = Tween(begin: 0.0, end: 75.0).animate(controllerAnim);
   }
 
@@ -62,7 +63,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         },
         child: PageView(
           pageSnapping: false,
-          onPageChanged: (p) {},
           controller: homeViewModel.pageController,
           physics: NeverScrollableScrollPhysics(),
           children: [
@@ -128,25 +128,25 @@ class _BottomNavigation extends StatelessWidget {
                     icon: Icon(
                       Icons.home,
                     ),
-                    title: Text("Home"),
+                    label: "Home",
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(
                       Icons.pedal_bike,
                     ),
-                    title: Text("Home"),
+                    label: "Home",
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(
                       Icons.bookmark,
                     ),
-                    title: Text("Home"),
+                    label: "Home",
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(
                       Icons.local_grocery_store,
                     ),
-                    title: Text("Home"),
+                    label: "Home",
                   ),
                 ],
               ),
