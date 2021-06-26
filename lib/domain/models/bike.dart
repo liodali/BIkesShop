@@ -20,6 +20,13 @@ class Bike {
     required this.image,
     required this.price,
   });
+
+  Bike.fromJson(Map m)
+      : this.id = m["id"],
+        this.name = m["name"],
+        this.category = m["category"],
+        this.image = m["image"],
+        this.price = m["price"];
 }
 
 class BikeDetail {
@@ -36,4 +43,25 @@ class BikeDetail {
     this.color,
     required this.size,
   });
+}
+
+extension BikeExt on Bike {
+  Bike copyWith({
+    int? id,
+    String? name,
+    String? category,
+    String? image,
+    double? price,
+    BikeDetail? bikeDetail,
+  }) {
+    Bike bike = Bike(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      category: category ?? this.category,
+      image: image ?? this.image,
+      price: price ?? this.price,
+    );
+    bike.bikeDetail = bikeDetail ?? this.bikeDetail;
+    return bike;
+  }
 }

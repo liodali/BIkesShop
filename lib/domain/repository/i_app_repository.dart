@@ -1,7 +1,9 @@
+import 'package:bikes_shop/domain/models/response.dart';
+
 abstract class IAppRepository<T> {
-  Future<T> getAll();
+  Future<IResponse> getAll();
 
-  Future<T> getAllByFilter(dynamic filter);
+  Future<IResponse> getAllByFilter(dynamic filter);
 
-  Future<T> getOne(int id);
+  Future<IResponse> getOne(int id);
 }
