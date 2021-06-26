@@ -17,11 +17,11 @@ class BikesViewModel extends ChangeNotifier {
   BikesViewModel();
 
   Future<void> retrievePagingBikes() async {
-    _isLoading = true;
-    notifyListeners();
-    _bikesResponse = await getIt<GetAllBikesUseCase>().invoke(null);
-    _isLoading = false;
-    notifyListeners();
+    // _isLoading = true;
+    // notifyListeners();
+    // _bikesResponse = await getIt<GetAllBikesUseCase>().invoke(null);
+    // _isLoading = false;
+    // notifyListeners();
   }
 
   void retrieveBikes() {
