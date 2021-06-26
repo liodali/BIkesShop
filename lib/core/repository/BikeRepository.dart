@@ -1,15 +1,21 @@
 import 'package:bikes_shop/core/repository/base_repository.dart';
 import 'package:bikes_shop/domain/models/response.dart';
 import 'package:bikes_shop/domain/repository/i_bike_repository.dart';
+import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: IBikeRepository)
 class BikeRepository with BaseRepository implements IBikeRepository {
   @override
   Future<IResponse> getAll() async {
-    var response = await get(endpoint: "bikes/all");
-
-    return BikesResponse(response.data as List<Map<String, dynamic>>);
+    Response<Map<String, dynamic>> response = await get(endpoint: "bikes/all");
+    var data = response.data as Map<String, dynamic>;
+    if (!data["success"]) {
+      return ErrorResponse(error: "Error to get Data");
+    }
+    return BikesResponse(
+      data["data"] ,
+    );
   }
 
   @override

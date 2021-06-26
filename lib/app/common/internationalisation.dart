@@ -14,13 +14,16 @@ class BikeAppLocalizations {
   static Map<String, Map<String, String>> _localizedValues = {
     'en': {
       'title_app': 'Bike Shopping',
+      'loading_text': 'Loading ...',
     },
     'fr': {
       'title_app': 'eBike Store',
+      'loading_text': 'Changement ...',
     },
   };
 
   String get titleApp => _localizedValues[locale.languageCode]!['title_app']!;
+  String get loadingText => _localizedValues[locale.languageCode]!['loading_text']!;
 }
 
 class AppLocalizationsDelegate

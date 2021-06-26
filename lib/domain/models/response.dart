@@ -2,26 +2,27 @@ import 'package:bikes_shop/domain/models/bike.dart';
 
 abstract class IResponse {}
 
+class ErrorResponse extends IResponse {
+  dynamic error;
+
+  ErrorResponse({
+    required this.error,
+  });
+}
+
 class AppResponse<T> extends IResponse {
   T? data;
-  dynamic error;
 
   AppResponse({
     required this.data,
-    this.error,
   });
 }
 
 class BikesResponse extends AppResponse<List<Bike>> {
-  BikesResponse(List<Map<String, dynamic>> json)
+  BikesResponse(List json)
       : super(
-          error: null,
-          data: json.map((e) => Bike.fromJson(e)).toList(),
-        );
-
-  BikesResponse.error(dynamic error)
-      : super(
-          error: error,
-          data: null,
+          data: json
+              .map((e) => Bike.fromJson(e as Map<String, dynamic>))
+              .toList(),
         );
 }
