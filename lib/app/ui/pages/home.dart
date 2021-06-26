@@ -1,6 +1,7 @@
 import 'package:bikes_shop/app/ui/component/list_bikes.dart';
 import 'package:bikes_shop/app/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 import 'favoriate_bikes.dart';
@@ -11,12 +12,18 @@ class Home extends StatefulWidget {
   State<StatefulWidget> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late HomeViewModel homeViewModel;
+  late AnimationController controllerAnim;
+  late Animation<double> animation;
 
   @override
   void initState() {
     super.initState();
+    controllerAnim = new AnimationController(
+        duration: Duration(milliseconds: 250), vsync: this);
+    // ..addListener(() => setState(() {}));
+    animation = Tween(begin: 0.0, end: 75.0).animate(controllerAnim);
   }
 
   @override
@@ -26,17 +33,38 @@ class _HomeState extends State<Home> {
   }
 
   @override
+  void dispose() {
+    controllerAnim.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text("Home"),
       ),
-      body: NotificationListener(
+      body: NotificationListener<UserScrollNotification>(
+        onNotification: (notification) {
+          if (notification.direction == ScrollDirection.reverse) {
+            controllerAnim.forward();
+          } else if (notification.direction == ScrollDirection.forward) {
+            controllerAnim.reverse();
+          } else {}
+          if (notification.metrics.atEdge &&
+              notification.metrics.pixels >=
+                  notification.metrics.maxScrollExtent - 150) {
+            controllerAnim.reverse();
+          }
+
+          return true;
+        },
         child: PageView(
           pageSnapping: false,
-          restorationId: "viewPager",
+          onPageChanged: (p) {},
           controller: homeViewModel.pageController,
+          physics: NeverScrollableScrollPhysics(),
           children: [
             StoreBike(),
             ListBikes(),
@@ -46,8 +74,14 @@ class _HomeState extends State<Home> {
         ),
       ),
       extendBody: true,
-      bottomNavigationBar: Transform.translate(
-        offset: Offset(0, 0),
+      bottomNavigationBar: AnimatedBuilder(
+        animation: animation,
+        builder: (ctx, child) {
+          return Transform.translate(
+            offset: Offset(0, animation.value),
+            child: child,
+          );
+        },
         child: _BottomNavigation(),
       ),
     );
@@ -81,14 +115,13 @@ class _BottomNavigation extends StatelessWidget {
               borderRadius: BorderRadius.circular(30),
               child: BottomNavigationBar(
                 currentIndex: page,
-
                 iconSize: 24,
                 unselectedFontSize: 14,
                 selectedFontSize: 16,
                 type: BottomNavigationBarType.shifting,
                 showSelectedLabels: false,
                 onTap: (p) {
-                  Provider.of<HomeViewModel>(context,listen: false).goTo(p);
+                  Provider.of<HomeViewModel>(context, listen: false).goTo(p);
                 },
                 items: [
                   BottomNavigationBarItem(

@@ -4,14 +4,18 @@ import 'package:bikes_shop/app/viewmodel/bikes_view_model.dart';
 import 'package:bikes_shop/domain/models/bike.dart';
 import 'package:bikes_shop/domain/models/response.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
 
-class ListBikes extends StatelessWidget {
+class ListBikes extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final bikeViewModel = Provider.of<BikesViewModel>(context,listen: false);
+    final Future<IResponse> future = useMemoized(() {
+      final bikeViewModel = Provider.of<BikesViewModel>(context, listen: false);
+      return bikeViewModel.retrieveBikes();
+    });
     return MyFutureBuilderComponent<List<Bike>>(
-      future: bikeViewModel.retrieveBikes(),
+      future: future,
       builder: (bikes) {
         return ListView.builder(
           itemBuilder: (ctx, index) {
