@@ -1,4 +1,5 @@
 import 'package:bikes_shop/app/viewmodel/bikes_view_model.dart';
+import 'package:bikes_shop/app/viewmodel/home_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,9 @@ void main() {
     providers: [
       ListenableProvider(
         create: (ctx) => BikesViewModel(),
+      ),
+      ListenableProvider(
+        create: (ctx) => HomeViewModel(),
       ),
     ],
     child: MyApp(),
