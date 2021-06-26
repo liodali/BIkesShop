@@ -3,9 +3,9 @@ import 'package:dio/dio.dart';
 abstract class BaseRepository {
   late Dio _dio = Dio();
 
-  final String server = "https://server/";
+  final String server = "https://bikesstoreapi.herokuapp.com/";
 
-  Future<Response> get({
+  Future<Response<Map<String, dynamic>>> get({
     required String endpoint,
     Map<String, dynamic>? query,
     CancelToken? token,
@@ -19,7 +19,7 @@ abstract class BaseRepository {
     );
   }
 
-  Future<Response> post(
+  Future<Response<Map<String, dynamic>>> post(
     String url,
     Map<String, dynamic> body,
     Map<String, dynamic> query,
