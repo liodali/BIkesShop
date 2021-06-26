@@ -4,13 +4,15 @@ import 'package:bikes_shop/domain/models/response.dart';
 import 'package:flutter/material.dart';
 
 class BikesViewModel extends ChangeNotifier {
-
   bool _isLoading = false;
   IResponse? _bikesResponse;
+  Future<IResponse>? _futureBike;
 
   bool get isLoading => _isLoading;
 
   IResponse? get bikesResponse => _bikesResponse;
+
+  Future<IResponse>? get future => _futureBike;
 
   BikesViewModel();
 
@@ -21,7 +23,8 @@ class BikesViewModel extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
-  Future<IResponse> retrieveBikes() async {
-    return await getIt<GetAllBikesUseCase>().invoke(null);
+
+  void retrieveBikes() {
+    _futureBike = getIt<GetAllBikesUseCase>().invoke(null);
   }
 }

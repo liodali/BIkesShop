@@ -12,7 +12,8 @@ class ListBikes extends HookWidget {
   Widget build(BuildContext context) {
     final Future<IResponse> future = useMemoized(() {
       final bikeViewModel = Provider.of<BikesViewModel>(context, listen: false);
-      return bikeViewModel.retrieveBikes();
+      bikeViewModel.retrieveBikes();
+      return bikeViewModel.future!;
     });
     return MyFutureBuilderComponent<List<Bike>>(
       future: future,
