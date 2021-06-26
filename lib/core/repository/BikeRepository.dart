@@ -1,7 +1,9 @@
 import 'package:bikes_shop/core/repository/base_repository.dart';
 import 'package:bikes_shop/domain/models/response.dart';
 import 'package:bikes_shop/domain/repository/i_bike_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: IBikeRepository)
 class BikeRepository with BaseRepository implements IBikeRepository {
   @override
   Future<IResponse> getAll() async {
