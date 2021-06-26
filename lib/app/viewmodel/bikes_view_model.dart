@@ -14,14 +14,11 @@ class BikesViewModel extends ChangeNotifier {
 
   BikesViewModel();
 
-  Future<void> retrievePagingBikes() async {
+  Future<void> retrieveBikes() async {
     _isLoading = true;
     notifyListeners();
     _bikesResponse = await getIt<GetAllBikesUseCase>().invoke(null);
     _isLoading = false;
     notifyListeners();
-  }
-  Future<IResponse> retrieveBikes() async {
-    return await getIt<GetAllBikesUseCase>().invoke(null);
   }
 }
