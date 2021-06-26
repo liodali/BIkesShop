@@ -1,11 +1,9 @@
+import 'package:bikes_shop/app/common/locator.dart';
 import 'package:bikes_shop/core/interactor/get_all_bikes_use_case.dart';
 import 'package:bikes_shop/domain/models/response.dart';
 import 'package:flutter/material.dart';
-import 'package:injectable/injectable.dart';
 
-@LazySingleton()
 class BikesViewModel extends ChangeNotifier {
-  final GetAllBikesUseCase _getAllBikesUseCase;
 
   bool _isLoading = false;
   IResponse? _bikesResponse;
@@ -14,12 +12,12 @@ class BikesViewModel extends ChangeNotifier {
 
   IResponse? get bikesResponse => _bikesResponse;
 
-  BikesViewModel(this._getAllBikesUseCase);
+  BikesViewModel();
 
   Future<void> retrieveBikes() async {
     _isLoading = true;
     notifyListeners();
-    _bikesResponse = await this._getAllBikesUseCase.invoke(null);
+    _bikesResponse = await getIt<GetAllBikesUseCase>().invoke(null);
     _isLoading = false;
     notifyListeners();
   }
