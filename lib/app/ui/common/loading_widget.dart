@@ -11,16 +11,18 @@ class LoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        CircularProgressIndicator(),
-        Text(
-          loadingText ?? BikeAppLocalizations.of(context)!.loadingText,
-        )
-      ],
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(),
+          Text(
+            loadingText ?? BikeAppLocalizations.of(context)!.loadingText,
+          )
+        ],
+      ),
     );
   }
 }

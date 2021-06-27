@@ -8,27 +8,43 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
 
 class ListBikes extends HookWidget {
+  ListBikes({
+    Key? key,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final Future<IResponse> future = useMemoized(() {
-      final bikeViewModel = Provider.of<BikesViewModel>(context, listen: false);
-      bikeViewModel.retrieveBikes();
+    final bikeViewModel = Provider.of<BikesViewModel>(context, listen: false);
+    Future<IResponse> future = useMemoized(() {
+      if (bikeViewModel.future == null) bikeViewModel.retrieveBikes();
       return bikeViewModel.future!;
     });
-    return MyFutureBuilderComponent<List<Bike>>(
-      future: future,
-      builder: (bikes) {
-        return ListView.builder(
-          itemBuilder: (ctx, index) {
-            return ItemBike(
-              bike: bikes[index],
-            );
-          },
-          itemCount: bikes.length,
-        );
+    final state = useState(future);
+    return RefreshIndicator(
+      notificationPredicate: (scrollNotif) {
+        print(scrollNotif.depth);
+        return true;
       },
-      mapTo: (response) {
-        return (response as BikesResponse).data!;
+      child: MyFutureBuilderComponent<List<Bike>>(
+        future: state.value,
+        builder: (bikes) {
+          return ListView.builder(
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemBuilder: (ctx, index) {
+              return ItemBike(
+                bike: bikes[index],
+              );
+            },
+            itemCount: bikes.length,
+          );
+        },
+        mapTo: (response) {
+          return (response as BikesResponse).data!;
+        },
+      ),
+      onRefresh: () async {
+        bikeViewModel.retrieveBikes();
+        state.value = bikeViewModel.future!;
       },
     );
   }

@@ -6,7 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 typedef BikeBuilder<T> = Widget Function(T data);
 typedef MapTo<T> = T Function(IResponse data);
 
-class MyFutureBuilderComponent<T> extends StatelessWidget {
+class MyFutureBuilderComponent<T> extends HookWidget {
   final BikeBuilder<T> builder;
   final Widget? errorWidget;
   final Widget? loading;
