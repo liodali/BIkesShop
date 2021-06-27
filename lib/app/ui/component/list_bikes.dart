@@ -1,3 +1,4 @@
+import 'package:bikes_shop/app/common/search_text_field.dart';
 import 'package:bikes_shop/app/ui/common/my_future_builder_component.dart';
 import 'package:bikes_shop/app/ui/widget/item_bike.dart';
 import 'package:bikes_shop/app/viewmodel/bikes_view_model.dart';
@@ -28,14 +29,28 @@ class ListBikes extends HookWidget {
       child: MyFutureBuilderComponent<List<Bike>>(
         future: state.value,
         builder: (bikes) {
-          return ListView.builder(
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemBuilder: (ctx, index) {
-              return ItemBike(
-                bike: bikes[index],
-              );
+          return NestedScrollView(
+            physics: NeverScrollableScrollPhysics(),
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return [
+                SliverAppBar(
+                  backgroundColor: Colors.white,
+                  title: _HeaderBikeSearch(),
+                  toolbarHeight: 64,
+                  bottom: PreferredSize(
+                    preferredSize: Size.fromHeight(48.0),
+                    child: Container(),
+                  ),
+                  pinned: false,
+                  floating: false,
+                  snap: false,
+                )
+              ];
             },
-            itemCount: bikes.length,
+            body: _BikesWidget(
+              bikes: bikes,
+            ),
           );
         },
         mapTo: (response) {
@@ -47,5 +62,62 @@ class ListBikes extends HookWidget {
         state.value = bikeViewModel.future!;
       },
     );
+  }
+}
+
+class _HeaderBikeSearch extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: SearchTextField(
+            textController: TextEditingController(),
+          ),
+        ),
+        IconButton(
+          onPressed: () {},
+          icon: Icon(
+            Icons.view_list,
+            size: 24,
+            color: Colors.grey[700],
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class _BikesWidget extends StatelessWidget {
+  final List<Bike> bikes;
+
+  _BikesWidget({
+    Key? key,
+    required this.bikes,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemBuilder: (ctx, index) {
+        return ItemBike(
+          bike: bikes[index],
+        );
+      },
+      itemCount: bikes.length,
+      shrinkWrap: true,
+      addAutomaticKeepAlives: true,
+    );
+    // return SliverList(
+    //   delegate: SliverChildBuilderDelegate(
+    //     (ctx, index) {
+    //       return ItemBike(
+    //         bike: bikes[index],
+    //       );
+    //     },
+    //     addAutomaticKeepAlives: true,
+    //     childCount: bikes.length,
+    //   ),
+    // );
   }
 }
