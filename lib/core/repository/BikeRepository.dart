@@ -2,7 +2,14 @@ import 'package:bikes_shop/core/repository/base_repository.dart';
 import 'package:bikes_shop/domain/models/response.dart';
 import 'package:bikes_shop/domain/repository/i_bike_repository.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
+
+Future<IResponse> computeJson(data) async {
+  return BikesResponse(
+    data,
+  );
+}
 
 @LazySingleton(as: IBikeRepository)
 class BikeRepository with BaseRepository implements IBikeRepository {
@@ -13,9 +20,7 @@ class BikeRepository with BaseRepository implements IBikeRepository {
     if (!data["success"]) {
       return ErrorResponse(error: "Error to get Data");
     }
-    return BikesResponse(
-      data["data"] ,
-    );
+    return compute(computeJson, data["data"]);
   }
 
   @override
