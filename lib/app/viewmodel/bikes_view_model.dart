@@ -4,6 +4,15 @@ import 'package:bikes_shop/domain/models/response.dart';
 import 'package:flutter/material.dart';
 
 class BikesViewModel extends ChangeNotifier {
+  bool _isList = true;
+
+  bool get isList => _isList;
+
+  void changeView(bool isList) {
+    _isList = isList;
+    notifyListeners();
+  }
+
   bool _isLoading = false;
   IResponse? _bikesResponse;
   Future<IResponse>? _futureBike;

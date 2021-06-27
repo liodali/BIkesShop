@@ -38,10 +38,6 @@ class ListBikes extends HookWidget {
                   backgroundColor: Colors.white,
                   title: _HeaderBikeSearch(),
                   toolbarHeight: 64,
-                  bottom: PreferredSize(
-                    preferredSize: Size.fromHeight(48.0),
-                    child: Container(),
-                  ),
                   pinned: false,
                   floating: false,
                   snap: false,
@@ -73,14 +69,23 @@ class _HeaderBikeSearch extends StatelessWidget {
         Expanded(
           child: SearchTextField(
             textController: TextEditingController(),
+            onTap: () {},
           ),
         ),
         IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.view_list,
-            size: 24,
-            color: Colors.grey[700],
+          onPressed: () {
+            final bikeViewModel = context.read<BikesViewModel>();
+            bikeViewModel.changeView(!bikeViewModel.isList);
+          },
+          icon: Selector<BikesViewModel, bool>(
+            selector: (ctx, viewModel) => viewModel.isList,
+            builder: (ctx, isList, _) {
+              return Icon(
+                isList ? Icons.view_comfortable : Icons.view_list,
+                size: 24,
+                color: Colors.grey[700],
+              );
+            },
           ),
         )
       ],
@@ -98,15 +103,35 @@ class _BikesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: (ctx, index) {
-        return ItemBike(
-          bike: bikes[index],
-        );
+    return Selector<BikesViewModel, bool>(
+      selector: (ctx, viewModel) => viewModel.isList,
+      builder: (ctx, isList, child) {
+        var widget = child!;
+        if (!isList) {
+          widget = GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+            ),
+            itemBuilder: (ctx, index) {
+              return ItemBike(
+                bike: bikes[index],
+                isGrid: true,
+              );
+            },
+          );
+        }
+        return widget;
       },
-      itemCount: bikes.length,
-      shrinkWrap: true,
-      addAutomaticKeepAlives: true,
+      child: ListView.builder(
+        itemBuilder: (ctx, index) {
+          return ItemBike(
+            bike: bikes[index],
+          );
+        },
+        itemCount: bikes.length,
+        shrinkWrap: true,
+        addAutomaticKeepAlives: true,
+      ),
     );
     // return SliverList(
     //   delegate: SliverChildBuilderDelegate(

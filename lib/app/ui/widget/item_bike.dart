@@ -5,61 +5,72 @@ import 'package:flutter/material.dart';
 
 class ItemBike extends StatelessWidget {
   final Bike bike;
+  final bool isGrid;
 
   ItemBike({
     required this.bike,
+    this.isGrid = false,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final sizeImage = 96.0;
+    final sizeImage = isGrid ? 128.0 : 96.0;
+    final children = [
+      Expanded(
+        flex: isGrid ? 4 : 2,
+        child: _ImageItemBike(
+          urlImage: bike.image,
+          sizeImage: sizeImage,
+        ),
+      ),
+      Expanded(
+        flex: isGrid ? 2 : 4,
+        child: Padding(
+          padding: EdgeInsets.only(
+            left: 8.0,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AutoSizeText(
+                bike.name,
+                maxLines: isGrid ? 1 : 2,
+                minFontSize: 12,
+                maxFontSize: 17,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+              Text("${bike.price}\$"),
+            ],
+          ),
+        ),
+      ),
+      if (!isGrid)
+        Expanded(
+          flex: 1,
+          child: SizedBox.shrink(),
+        ),
+    ];
     return Card(
       elevation: 1,
       child: Stack(
         children: [
           Container(
-            height: sizeImage,
+            height: isGrid ? sizeImage * 2 : sizeImage,
             padding: EdgeInsets.all(5.0),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: _ImageItemBike(
-                    urlImage: bike.image,
-                    sizeImage: sizeImage,
+            child: isGrid
+                ? Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: children,
+                  )
+                : Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: children,
                   ),
-                ),
-                Expanded(
-                  flex: 4,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: 8.0,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        AutoSizeText(
-                          bike.name,
-                          maxLines: 2,
-                          minFontSize: 14,
-                          maxFontSize: 17,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text("${bike.price}\$"),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: SizedBox.shrink(),
-                ),
-              ],
-            ),
           ),
           Positioned(
             top: 0,
@@ -94,10 +105,12 @@ class ItemBike extends StatelessWidget {
 class _ImageItemBike extends StatelessWidget {
   final String urlImage;
   final double sizeImage;
+  final bool isGrid;
 
   _ImageItemBike({
     required this.urlImage,
     this.sizeImage = 72,
+    this.isGrid = false,
     Key? key,
   }) : super(key: key);
 
@@ -107,7 +120,7 @@ class _ImageItemBike extends StatelessWidget {
       imageUrl: urlImage,
       colorBlendMode: BlendMode.clear,
       filterQuality: FilterQuality.medium,
-      height: sizeImage,
+      height: isGrid ? sizeImage * 1.5 : sizeImage,
       width: sizeImage,
       imageBuilder: (ctx, imageProvider) {
         return ClipRRect(
@@ -115,7 +128,7 @@ class _ImageItemBike extends StatelessWidget {
           child: Image(
             image: imageProvider,
             fit: BoxFit.cover,
-            height: sizeImage,
+            height: isGrid ? sizeImage * 1.5 : sizeImage,
             width: sizeImage,
           ),
         );
