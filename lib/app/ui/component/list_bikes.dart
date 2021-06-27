@@ -23,7 +23,6 @@ class ListBikes extends HookWidget {
     final state = useState(future);
     return RefreshIndicator(
       notificationPredicate: (scrollNotif) {
-        print(scrollNotif.depth);
         return true;
       },
       child: MyFutureBuilderComponent<List<Bike>>(
@@ -38,7 +37,7 @@ class ListBikes extends HookWidget {
                   backgroundColor: Colors.white,
                   title: _HeaderBikeSearch(),
                   toolbarHeight: 64,
-                  pinned: false,
+                  pinned: true,
                   floating: false,
                   snap: false,
                 )
@@ -111,6 +110,7 @@ class _BikesWidget extends StatelessWidget {
           widget = GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
+              mainAxisExtent: 256
             ),
             itemBuilder: (ctx, index) {
               return ItemBike(

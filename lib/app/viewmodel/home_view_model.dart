@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 class HomeViewModel extends ChangeNotifier {
   int _indexPage = 0;
-  int _maxPages = 4;
+  int _maxPages = 3;
 
   late final _pageController = PageController(
     initialPage: _indexPage,

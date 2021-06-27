@@ -15,13 +15,14 @@ class ItemBike extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sizeImage = isGrid ? 128.0 : 96.0;
+    final sizeImage = 96.0;
     final children = [
       Expanded(
         flex: isGrid ? 4 : 2,
         child: _ImageItemBike(
           urlImage: bike.image,
           sizeImage: sizeImage,
+          isGrid: isGrid,
         ),
       ),
       Expanded(
@@ -29,9 +30,10 @@ class ItemBike extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.only(
             left: 8.0,
+            right: isGrid ? 8.0 : 0.0,
           ),
           child: Column(
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AutoSizeText(
@@ -60,8 +62,8 @@ class ItemBike extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            height: isGrid ? sizeImage * 2 : sizeImage,
-            padding: EdgeInsets.all(5.0),
+            height: isGrid ? null : sizeImage,
+            padding: isGrid ? null : EdgeInsets.all(5.0),
             child: isGrid
                 ? Column(
                     mainAxisSize: MainAxisSize.max,
@@ -72,30 +74,37 @@ class ItemBike extends StatelessWidget {
                     children: children,
                   ),
           ),
-          Positioned(
-            top: 0,
-            right: 0,
-            child: IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.bookmark_border_outlined,
-                color: Colors.black,
+          if (!isGrid)
+            Positioned(
+              top: 0,
+              right: 0,
+              child: IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.bookmark_border_outlined,
+                  color: Colors.black,
+                ),
+                iconSize: 24,
               ),
-              iconSize: 24,
             ),
-          ),
           Positioned(
-            bottom: -5,
+            bottom: -8,
             right: 0,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.only(topLeft: Radius.circular(16.0)))),
+                elevation: 0,
+                padding: EdgeInsets.all(0.0),
+                minimumSize:Size(48,32),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16.0),
+                  ),
+                ),
+              ),
               onPressed: () {},
               child: Icon(Icons.add),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -120,16 +129,22 @@ class _ImageItemBike extends StatelessWidget {
       imageUrl: urlImage,
       colorBlendMode: BlendMode.clear,
       filterQuality: FilterQuality.medium,
-      height: isGrid ? sizeImage * 1.5 : sizeImage,
-      width: sizeImage,
+      height: isGrid ? null : sizeImage,
+      width: isGrid ? null : sizeImage,
       imageBuilder: (ctx, imageProvider) {
         return ClipRRect(
-          borderRadius: BorderRadius.circular(5.0),
+          borderRadius: isGrid
+              ? BorderRadius.only(
+                  topLeft: Radius.circular(5.0),
+                  topRight: Radius.circular(5.0),
+                )
+              : BorderRadius.circular(5.0),
+          clipBehavior: Clip.hardEdge,
           child: Image(
             image: imageProvider,
-            fit: BoxFit.cover,
-            height: isGrid ? sizeImage * 1.5 : sizeImage,
-            width: sizeImage,
+            fit: isGrid ? BoxFit.cover : BoxFit.cover,
+            height: isGrid ? null : sizeImage,
+            width: isGrid ? null : sizeImage,
           ),
         );
       },

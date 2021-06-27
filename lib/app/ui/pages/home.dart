@@ -5,7 +5,6 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 import 'favorite_bikes.dart';
-import 'store_bike.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -45,6 +44,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text("Home"),
+        elevation: 0,
       ),
       body: NotificationListener<UserScrollNotification>(
         onNotification: (notification) {
@@ -66,7 +66,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           controller: homeViewModel.pageController,
           physics: NeverScrollableScrollPhysics(),
           children: [
-            StoreBike(),
             ListBikes(),
             FavoriteBikes(),
             ListBikes(),
@@ -132,21 +131,15 @@ class _BottomNavigation extends StatelessWidget {
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(
-                      Icons.pedal_bike,
-                    ),
-                    label: "Home",
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(
                       Icons.bookmark,
                     ),
-                    label: "Home",
+                    label: "Favorite Bikes",
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(
                       Icons.local_grocery_store,
                     ),
-                    label: "Home",
+                    label: "Purchase",
                   ),
                 ],
               ),
