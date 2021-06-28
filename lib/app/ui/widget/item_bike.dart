@@ -1,7 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bikes_shop/domain/models/bike.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import '../../common/routes.gr.dart';
 
 class ItemBike extends StatelessWidget {
   final Bike bike;
@@ -30,11 +32,12 @@ class ItemBike extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.only(
             left: 8.0,
-            right: isGrid ? 8.0 : 0.0,
+            right: isGrid ? 8.0 : 3.0,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               AutoSizeText(
                 bike.name,
@@ -57,55 +60,63 @@ class ItemBike extends StatelessWidget {
           child: SizedBox.shrink(),
         ),
     ];
-    return Card(
-      elevation: 1,
-      child: Stack(
-        children: [
-          Container(
-            height: isGrid ? null : sizeImage,
-            padding: isGrid ? null : EdgeInsets.all(5.0),
-            child: isGrid
-                ? Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: children,
-                  )
-                : Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: children,
+    return GestureDetector(
+      onTap: () {
+        AutoRouter.of(context).navigate(
+          DetailBike(bike: bike),
+        );
+      },
+      child: Card(
+        elevation: 1,
+        child: Stack(
+          children: [
+            Container(
+              height: isGrid ? null : sizeImage,
+              padding: isGrid ? null : EdgeInsets.all(5.0),
+              child: isGrid
+                  ? Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: children,
+                    )
+                  : Row(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: children,
+                    ),
+            ),
+            if (!isGrid)
+              Positioned(
+                top: 0,
+                right: 0,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.bookmark_border_outlined,
+                    color: Colors.black,
                   ),
-          ),
-          if (!isGrid)
+                  iconSize: 24,
+                ),
+              ),
             Positioned(
-              top: 0,
+              bottom: -8,
               right: 0,
-              child: IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.bookmark_border_outlined,
-                  color: Colors.black,
-                ),
-                iconSize: 24,
-              ),
-            ),
-          Positioned(
-            bottom: -8,
-            right: 0,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                elevation: 0,
-                padding: EdgeInsets.all(0.0),
-                minimumSize:Size(48,32),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(16.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  padding: EdgeInsets.all(0.0),
+                  minimumSize: Size(48, 32),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(16.0),
+                    ),
                   ),
                 ),
+                onPressed: () {},
+                child: Icon(Icons.add),
               ),
-              onPressed: () {},
-              child: Icon(Icons.add),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -142,7 +153,7 @@ class _ImageItemBike extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           child: Image(
             image: imageProvider,
-            fit: isGrid ? BoxFit.cover : BoxFit.cover,
+            fit: isGrid ? BoxFit.contain : BoxFit.cover,
             height: isGrid ? null : sizeImage,
             width: isGrid ? null : sizeImage,
           ),

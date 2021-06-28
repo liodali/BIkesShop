@@ -2,16 +2,16 @@ import 'package:bikes_shop/app/viewmodel/bikes_view_model.dart';
 import 'package:bikes_shop/app/viewmodel/home_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'app/common/routes.dart';
 import 'app/common/internationalisation.dart';
-import 'app/ui/pages/home.dart';
 import 'app/common/locator.dart';
 
 void main() {
   configureInjection();
+  final _rootRouter = RootRouter();
+
   runApp(MultiProvider(
     providers: [
       ListenableProvider(
@@ -21,22 +21,27 @@ void main() {
         create: (ctx) => HomeViewModel(),
       ),
     ],
-    child: MyApp(),
+    child: MyApp(router: _rootRouter,),
   ));
 }
 
 class MyApp extends StatelessWidget {
+  final RootRouter router;
+
+  const MyApp({
+    Key? key,
+    required this.router,
+  }) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final _rootRouter = RootRouter();
-
     return MaterialApp.router(
       // onGenerateTitle: (ctx) {
       //   return BikeAppLocalizations.of(context)!.titleApp;
       // },
-      routerDelegate: _rootRouter.delegate(),
-      routeInformationParser: _rootRouter.defaultRouteParser(),
+      routerDelegate: router.delegate(),
+      routeInformationParser: router.defaultRouteParser(),
       theme: ThemeData(
           primarySwatch: Colors.lime,
           primaryColorDark: Colors.lime[700],
