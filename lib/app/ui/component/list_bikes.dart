@@ -23,13 +23,13 @@ class ListBikes extends HookWidget {
     final state = useState(future);
     return RefreshIndicator(
       notificationPredicate: (scrollNotif) {
-        return true;
+        return false;
       },
       child: MyFutureBuilderComponent<List<Bike>>(
         future: state.value,
         builder: (bikes) {
           return NestedScrollView(
-            physics: NeverScrollableScrollPhysics(),
+            physics: ClampingScrollPhysics(),
             headerSliverBuilder:
                 (BuildContext context, bool innerBoxIsScrolled) {
               return [
