@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
+import 'app/common/routes.dart';
 import 'app/common/internationalisation.dart';
 import 'app/ui/pages/home.dart';
 import 'app/common/locator.dart';
@@ -29,23 +29,25 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final _rootRouter = RootRouter();
+
+    return MaterialApp.router(
       // onGenerateTitle: (ctx) {
       //   return BikeAppLocalizations.of(context)!.titleApp;
       // },
+      routerDelegate: _rootRouter.delegate(),
+      routeInformationParser: _rootRouter.defaultRouteParser(),
       theme: ThemeData(
-        primarySwatch: Colors.lime,
-        primaryColorDark: Colors.lime[700],
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor: Colors.white,
-          elevation: 3,
-          selectedItemColor: Colors.black87,
-          unselectedItemColor: Colors.grey,
-        ),
-        backgroundColor: Colors.grey[300]
-      ),
-      home: Home(),
-      navigatorKey: Get.key,
+          primarySwatch: Colors.lime,
+          primaryColorDark: Colors.lime[700],
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            backgroundColor: Colors.white,
+            elevation: 3,
+            selectedItemColor: Colors.black87,
+            unselectedItemColor: Colors.grey,
+          ),
+          backgroundColor: Colors.grey[300]),
+      //home: Home(),
       localizationsDelegates: [
         const AppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,

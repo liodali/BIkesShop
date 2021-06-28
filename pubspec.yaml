@@ -31,10 +31,10 @@ dependencies:
   floor: ^1.1.0
   injectable:
   get_it:
-  get: ^4.1.4
   rxdart:
   cached_network_image: ^3.0.0
   auto_size_text: ^3.0.0-nullsafety.0
+  auto_route: ^2.2.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -43,6 +43,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  auto_route_generator:
   injectable_generator:
   floor_generator: ^1.1.0
   build_runner: ^2.0.0
