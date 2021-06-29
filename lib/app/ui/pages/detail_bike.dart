@@ -69,7 +69,7 @@ class _BodyDetailBikeWidget extends StatelessWidget {
                   imageBuilder: (ctx, imageProvider) {
                     return ClipRRect(
                       borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(35),
+                          bottomLeft: Radius.circular(85),
                           bottomRight: Radius.circular(0)),
                       clipBehavior: Clip.hardEdge,
                       child: Image(
@@ -88,44 +88,51 @@ class _BodyDetailBikeWidget extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            top: MediaQuery.of(context).size.width / 2,
-            child: DraggableScrollableSheet(
-              initialChildSize: .87,
-              minChildSize: .87,
-              expand: false,
-              builder: (ctx, controller) {
-                return Card(
-                  elevation: 25,
-                  margin: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(35.0),
-                      topRight: Radius.circular(25.0),
-                    ),
+          DraggableScrollableSheet(
+            initialChildSize: .65,
+            maxChildSize: .68,
+            minChildSize: .65,
+            expand: true,
+            builder: (ctx, controller) {
+              return Card(
+                elevation: 25,
+                margin: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(35.0),
+                    topRight: Radius.circular(25.0),
                   ),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(top: 16.0),
-                              child: _TitleDetailBikeWidget(
-                                bikeName: bike.name,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: 16.0),
+                            child: _TitleDetailBikeWidget(
+                              bikeName: bike.name,
+                            ),
+                          ),
+                          Expanded(
+                            child: ScrollConfiguration(
+                              behavior: ScrollBehavior(),
+                              child: SingleChildScrollView(
+                                controller: controller,
+                                child: _MoreDetailBike(
+                                  bike: bike,
+                                ),
                               ),
                             ),
-                            _MoreDetailBike(
-                              bike: bike,
-                            )
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 5.0),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 5.0),
+                      child: Container(
+                        color: Colors.white,
                         child: Row(
                           children: [
                             Expanded(
@@ -167,11 +174,11 @@ class _BodyDetailBikeWidget extends StatelessWidget {
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                );
-              },
-            ),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -237,6 +244,8 @@ class _MoreDetailBike extends StatelessWidget {
       future: detailViewModel.future!,
       builder: (detail) {
         return Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
               children: [
@@ -255,6 +264,28 @@ class _MoreDetailBike extends StatelessWidget {
               ],
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 8.0,horizontal: 16.0),
+              child: AutoSizeText.rich(
+                TextSpan(
+                  text: "Description\n",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: "${detail.description}",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                ),
+                overflow: TextOverflow.fade,
+              ),
             ),
           ],
         );
@@ -321,9 +352,9 @@ class _BadgeDetailBike extends StatelessWidget {
               Text(
                 subtitle,
                 style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                  fontSize: 11,
-                  color: Colors.grey[600],
-                ),
+                      fontSize: 11,
+                      color: Colors.grey[600],
+                    ),
               ),
               Align(
                 alignment: Alignment.bottomLeft,
