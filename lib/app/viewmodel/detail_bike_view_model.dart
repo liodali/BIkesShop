@@ -1,5 +1,6 @@
 import 'package:bikes_shop/app/common/locator.dart';
 import 'package:bikes_shop/core/interactor/get_all_bikes_use_case.dart';
+import 'package:bikes_shop/core/interactor/get_detail_bike_use_case.dart';
 import 'package:bikes_shop/domain/models/response.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,6 @@ class DetailBikeViewModel extends ChangeNotifier {
 
 
   void retrieveBikeDetail(int idBike) {
-    _futureBike = getIt<GetAllBikesUseCase>().invoke(null);
+    _futureBike = getIt<GetDetailBikeUseCase>().invoke(idBike);
   }
 }
