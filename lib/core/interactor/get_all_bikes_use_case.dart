@@ -4,7 +4,7 @@ import 'package:bikes_shop/domain/repository/i_bike_repository.dart';
 import 'package:injectable/injectable.dart';
 
 @Injectable()
-class GetAllBikesUseCase implements FutureUseCase<IResponse, dynamic> {
+class GetAllBikesUseCase implements FutureUseCase<dynamic, IResponse> {
   final IBikeRepository _repository;
 
   GetAllBikesUseCase(this._repository);
