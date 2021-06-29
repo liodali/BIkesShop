@@ -112,6 +112,7 @@ class _BikesWidget extends StatelessWidget {
               crossAxisCount: 2,
               mainAxisExtent: 256
             ),
+            itemCount: bikes.length,
             itemBuilder: (ctx, index) {
               return ItemBike(
                 bike: bikes[index],

@@ -141,7 +141,7 @@ class _ImageItemBike extends StatelessWidget {
       colorBlendMode: BlendMode.clear,
       filterQuality: FilterQuality.medium,
       height: isGrid ? null : sizeImage,
-      width: isGrid ? null : sizeImage,
+      width: isGrid ? 256 : sizeImage,
       imageBuilder: (ctx, imageProvider) {
         return ClipRRect(
           borderRadius: isGrid
@@ -153,7 +153,7 @@ class _ImageItemBike extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           child: Image(
             image: imageProvider,
-            fit: isGrid ? BoxFit.contain : BoxFit.cover,
+            fit: isGrid ? BoxFit.fill : BoxFit.cover,
             height: isGrid ? null : sizeImage,
             width: isGrid ? null : sizeImage,
           ),
