@@ -32,8 +32,16 @@ class BikesViewModel extends ChangeNotifier {
     // _isLoading = false;
     // notifyListeners();
   }
-
-  void retrieveBikes() {
+  void initBikes() async {
     _futureBike = getIt<GetAllBikesUseCase>().invoke(null);
+  }
+  void retrieveBikes() async {
+    _futureBike = getIt<GetAllBikesUseCase>().invoke(null);
+    notifyListeners();
+  }
+
+  void retrieveBikesByFilter(String query) async {
+    _futureBike = getIt<GetAllBikesUseCase>().invoke(query);
+    notifyListeners();
   }
 }

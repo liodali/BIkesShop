@@ -26,9 +26,14 @@ class BikeRepository with BaseRepository implements IBikeRepository {
   }
 
   @override
-  Future<IResponse> getAllByFilter(filter) {
-    // TODO: implement getAllByFilter
-    throw UnimplementedError();
+  Future<IResponse> getAllByFilter(filter) async {
+    Response<Map<String, dynamic>> response =
+        await get(endpoint: "bikes/all/filter?$filter");
+    var data = response.data as Map<String, dynamic>;
+    if (data["success"] == false) {
+      return ErrorResponse(error: "Error to get Data");
+    }
+    return compute(computeParserBikesJson, data["data"] as List);
   }
 
   @override

@@ -10,9 +10,9 @@ class GetAllBikesUseCase implements FutureUseCase<dynamic, IResponse> {
   GetAllBikesUseCase(this._repository);
 
   @override
-  Future<IResponse> invoke(dynamic parameter) {
+  Future<IResponse> invoke(dynamic parameter) async {
     if (parameter != null) {
-      return this._repository.getAllByFilter(parameter);
+      return await this._repository.getAllByFilter(parameter);
     }
     return this._repository.getAll();
   }

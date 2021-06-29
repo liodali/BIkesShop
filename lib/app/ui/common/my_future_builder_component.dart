@@ -24,10 +24,10 @@ class MyFutureBuilderComponent<T> extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    //final _hookFuture = useState(future);
     return HookBuilder(
       builder: (ctx) {
-        final _hookFuture = useMemoized(() => future);
-        final snap = useFuture(_hookFuture);
+        final snap = useFuture(future);
         if (snap.connectionState == ConnectionState.waiting) {
           return this.loading ?? LoadingWidget();
         } else if (snap.connectionState == ConnectionState.done) {

@@ -1,4 +1,5 @@
 import 'package:bikes_shop/app/common/search_text_field.dart';
+import 'package:bikes_shop/app/common/utilities.dart';
 import 'package:bikes_shop/app/ui/common/custom_tab_filter.dart';
 import 'package:bikes_shop/app/ui/common/my_future_builder_component.dart';
 import 'package:bikes_shop/app/ui/widget/item_bike.dart';
@@ -16,88 +17,96 @@ class ListBikes extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bikeViewModel = Provider.of<BikesViewModel>(context, listen: false);
-    Future<IResponse> future = useMemoized(() {
-      if (bikeViewModel.future == null) bikeViewModel.retrieveBikes();
-      return bikeViewModel.future!;
-    });
-    final state = useState(future);
+    final bikeViewModel = context.read<BikesViewModel>();
+    // Future<IResponse> future = useMemoized(() {
+    //   if (bikeViewModel.future == null) bikeViewModel.retrieveBikes();
+    //   return ;
+    // });
+    useEffect(() {
+      bikeViewModel.initBikes();
+    }, const []);
+    // final state = useState();
     return RefreshIndicator(
       notificationPredicate: (scrollNotif) {
-        return false;
+        return true;
       },
-      child: MyFutureBuilderComponent<List<Bike>>(
-        future: state.value,
-        builder: (bikes) {
-          return NestedScrollView(
-            physics: ClampingScrollPhysics(),
-            headerSliverBuilder:
-                (BuildContext context, bool innerBoxIsScrolled) {
-              return [
-                SliverAppBar(
-                  backgroundColor: Colors.white,
-                  title: _HeaderBikeSearch(),
-                  toolbarHeight: 72,
-                  actions: [
-                    IconButton(
-                      onPressed: () {
-                        final bikeViewModel = context.read<BikesViewModel>();
-                        bikeViewModel.changeView(!bikeViewModel.isList);
-                      },
-                      icon: Selector<BikesViewModel, bool>(
-                        selector: (ctx, viewModel) => viewModel.isList,
-                        builder: (ctx, isList, _) {
-                          return Icon(
-                            isList ? Icons.view_comfortable : Icons.view_list,
-                            size: 24,
-                            color: Colors.grey[700],
-                          );
+      child: NestedScrollView(
+        physics: ClampingScrollPhysics(),
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            SliverAppBar(
+              backgroundColor: Colors.white,
+              title: _HeaderBikeSearch(),
+              toolbarHeight: 72,
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    final bikeViewModel = context.read<BikesViewModel>();
+                    bikeViewModel.changeView(!bikeViewModel.isList);
+                  },
+                  icon: Selector<BikesViewModel, bool>(
+                    selector: (ctx, viewModel) => viewModel.isList,
+                    builder: (ctx, isList, _) {
+                      return Icon(
+                        isList ? Icons.view_comfortable : Icons.view_list,
+                        size: 24,
+                        color: Colors.grey[700],
+                      );
+                    },
+                  ),
+                )
+              ],
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(56.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                      ),
+                      child: CustomTabFilter(
+                        tabs: categories,
+                        selectedCategory: (category) async {
+                          if (category == categories.first) {
+                            bikeViewModel.retrieveBikes();
+                          } else {
+                            String query = "category=$category";
+                            bikeViewModel.retrieveBikesByFilter(query);
+                          }
+                          // state.value = bikeViewModel.future!;
                         },
                       ),
-                    )
-                  ],
-                  bottom: PreferredSize(
-                    preferredSize: Size.fromHeight(56.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 12.0,
-                          ),
-                          child: CustomTabFilter(
-                            tabs: [
-                              "All",
-                              "Sport",
-                              "Electric",
-                              "Race",
-                              "Street",
-                              "Mountain"
-                            ],
-                            selectedCategory: (category) {},
-                          ),
-                        ),
-                      ],
                     ),
-                  ),
-                  pinned: true,
-                  floating: true,
-                  snap: false,
-                )
-              ];
-            },
-            body: _BikesWidget(
-              bikes: bikes,
-            ),
-          );
+                  ],
+                ),
+              ),
+              pinned: true,
+              floating: true,
+              snap: false,
+            )
+          ];
         },
-        mapTo: (response) {
-          return (response as BikesResponse).data!;
-        },
+        body: Selector<BikesViewModel, Future<IResponse>>(
+          selector: (ctx, bikesViewModel) => bikeViewModel.future!,
+          builder: (ctx, future, _) {
+            return MyFutureBuilderComponent<List<Bike>>(
+              future: bikeViewModel.future!,
+              builder: (bikes) {
+                return _BikesWidget(
+                  bikes: bikes,
+                );
+              },
+              mapTo: (response) {
+                return (response as BikesResponse).data!;
+              },
+            );
+          },
+        ),
       ),
       onRefresh: () async {
         bikeViewModel.retrieveBikes();
-        state.value = bikeViewModel.future!;
+        //state.value = bikeViewModel.future!;
       },
     );
   }
