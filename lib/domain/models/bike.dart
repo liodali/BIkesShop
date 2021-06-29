@@ -43,6 +43,12 @@ class BikeDetail {
     this.color,
     required this.size,
   });
+  BikeDetail.fromJson(Map m)
+      : this.idBike = m["id"],
+        this.description = m["description"],
+        this.images = (m["images"] as List).map((e) => e as String).toList(),
+        this.color = m["color"],
+        this.size = m["size"];
 }
 
 extension BikeExt on Bike {

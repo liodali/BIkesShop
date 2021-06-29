@@ -5,10 +5,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 
-Future<IResponse> computeJson(data) async {
-  return BikesResponse(
-    data,
-  );
+Future<IResponse> computeParserBikesJson(List<dynamic> data) async {
+  return BikesResponse(data);
+}
+
+Future<IResponse> computeParserBikeJson(Map data) async {
+  return DetailBikeResponse(data);
 }
 
 @LazySingleton(as: IBikeRepository)
@@ -20,7 +22,7 @@ class BikeRepository with BaseRepository implements IBikeRepository {
     if (!data["success"]) {
       return ErrorResponse(error: "Error to get Data");
     }
-    return compute(computeJson, data["data"]);
+    return compute(computeParserBikesJson, data["data"] as List);
   }
 
   @override
@@ -30,9 +32,14 @@ class BikeRepository with BaseRepository implements IBikeRepository {
   }
 
   @override
-  Future<IResponse> getDetailBike(int idBike) {
-    // TODO: implement getDetailBike
-    throw UnimplementedError();
+  Future<IResponse> getDetailBike(int idBike) async {
+    Response<Map<String, dynamic>> response =
+        await get(endpoint: "bike/$idBike");
+    var data = response.data as Map<String, dynamic>;
+    if (!data["success"]) {
+      return ErrorResponse(error: "Error to get Data");
+    }
+    return compute(computeParserBikeJson, data["data"] as Map);
   }
 
   @override
