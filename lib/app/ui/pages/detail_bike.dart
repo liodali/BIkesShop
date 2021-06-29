@@ -1,9 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bikes_shop/app/ui/common/my_future_builder_component.dart';
 import 'package:bikes_shop/app/viewmodel/detail_bike_view_model.dart';
 import 'package:bikes_shop/domain/models/bike.dart';
+import 'package:bikes_shop/domain/models/response.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
 
 class DetailBikePage extends StatelessWidget {
@@ -115,24 +118,9 @@ class _BodyDetailBikeWidget extends StatelessWidget {
                                 bikeName: bike.name,
                               ),
                             ),
-                            Row(
-                              children: [
-                                _BadgeDetailBike(
-                                  subtitle: "category",
-                                  nameTitle: bike.category,
-                                ),
-                                _BadgeDetailBike(
-                                  subtitle: "category",
-                                  nameTitle: bike.category,
-                                ),
-                                _BadgeDetailBike(
-                                  subtitle: "category",
-                                  nameTitle: bike.category,
-                                ),
-                              ],
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                            ),
+                            _MoreDetailBike(
+                              bike: bike,
+                            )
                           ],
                         ),
                       ),
@@ -233,6 +221,73 @@ class _TitleDetailBikeWidget extends StatelessWidget {
   }
 }
 
+class _MoreDetailBike extends StatelessWidget {
+  final Bike bike;
+
+  const _MoreDetailBike({
+    Key? key,
+    required this.bike,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final detailViewModel = context.read<DetailBikeViewModel>();
+    detailViewModel.retrieveBikeDetail(bike.id);
+    return MyFutureBuilderComponent<BikeDetail>(
+      future: detailViewModel.future!,
+      builder: (detail) {
+        return Column(
+          children: [
+            Row(
+              children: [
+                _BadgeDetailBike(
+                  subtitle: "category",
+                  nameTitle: bike.category,
+                ),
+                _BadgeDetailBike(
+                  subtitle: "Size",
+                  nameTitle: "${detail.size.toInt()} cm",
+                ),
+                _BadgeDetailBike(
+                  subtitle: "Color",
+                  nameTitle: "${detail.color}",
+                ),
+              ],
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+            ),
+          ],
+        );
+      },
+      loading: Column(
+        children: [
+          Row(
+            children: [
+              _BadgeDetailBike(
+                subtitle: "Category",
+                nameTitle: "-",
+              ),
+              _BadgeDetailBike(
+                subtitle: "Size",
+                nameTitle: "-",
+              ),
+              _BadgeDetailBike(
+                subtitle: "Color",
+                nameTitle: "-",
+              ),
+            ],
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+          )
+        ],
+      ),
+      mapTo: (response) {
+        return (response as DetailBikeResponse).data!;
+      },
+    );
+  }
+}
+
 class _BadgeDetailBike extends StatelessWidget {
   final String subtitle;
   final String nameTitle;
@@ -245,38 +300,42 @@ class _BadgeDetailBike extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.all(8.0),
-      color: Colors.grey[300],
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-      elevation: 1,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: 12.0,
-          horizontal: 8.0,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              subtitle,
-              style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                    fontSize: 11,
-                    color: Colors.grey[600],
-                  ),
-            ),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Text(
-                nameTitle,
-                style: TextStyle(
-                  fontSize: 13,
+    return SizedBox(
+      width: 128,
+      height: 96,
+      child: Card(
+        margin: EdgeInsets.all(8.0),
+        color: Colors.grey[300],
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        elevation: 1,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            vertical: 12.0,
+            horizontal: 8.0,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                subtitle,
+                style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                  fontSize: 11,
+                  color: Colors.grey[600],
                 ),
               ),
-            )
-          ],
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: Text(
+                  nameTitle,
+                  style: TextStyle(
+                    fontSize: 13,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
