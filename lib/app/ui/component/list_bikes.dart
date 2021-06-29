@@ -1,4 +1,5 @@
 import 'package:bikes_shop/app/common/search_text_field.dart';
+import 'package:bikes_shop/app/ui/common/custom_tab_filter.dart';
 import 'package:bikes_shop/app/ui/common/my_future_builder_component.dart';
 import 'package:bikes_shop/app/ui/widget/item_bike.dart';
 import 'package:bikes_shop/app/viewmodel/bikes_view_model.dart';
@@ -36,9 +37,51 @@ class ListBikes extends HookWidget {
                 SliverAppBar(
                   backgroundColor: Colors.white,
                   title: _HeaderBikeSearch(),
-                  toolbarHeight: 64,
+                  toolbarHeight: 72,
+                  actions: [
+                    IconButton(
+                      onPressed: () {
+                        final bikeViewModel = context.read<BikesViewModel>();
+                        bikeViewModel.changeView(!bikeViewModel.isList);
+                      },
+                      icon: Selector<BikesViewModel, bool>(
+                        selector: (ctx, viewModel) => viewModel.isList,
+                        builder: (ctx, isList, _) {
+                          return Icon(
+                            isList ? Icons.view_comfortable : Icons.view_list,
+                            size: 24,
+                            color: Colors.grey[700],
+                          );
+                        },
+                      ),
+                    )
+                  ],
+                  bottom: PreferredSize(
+                    preferredSize: Size.fromHeight(56.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12.0,
+                          ),
+                          child: CustomTabFilter(
+                            tabs: [
+                              "All",
+                              "Sport",
+                              "Electric",
+                              "Race",
+                              "Street",
+                              "Mountain"
+                            ],
+                            selectedCategory: (category) {},
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   pinned: true,
-                  floating: false,
+                  floating: true,
                   snap: false,
                 )
               ];
@@ -63,31 +106,16 @@ class ListBikes extends HookWidget {
 class _HeaderBikeSearch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: SearchTextField(
-            textController: TextEditingController(),
-            onTap: () {},
-          ),
+    return SizedBox(
+      height: 56,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: 12.0),
+        child: SearchTextField(
+          radius: 24.0,
+          textController: TextEditingController(),
+          onTap: () {},
         ),
-        IconButton(
-          onPressed: () {
-            final bikeViewModel = context.read<BikesViewModel>();
-            bikeViewModel.changeView(!bikeViewModel.isList);
-          },
-          icon: Selector<BikesViewModel, bool>(
-            selector: (ctx, viewModel) => viewModel.isList,
-            builder: (ctx, isList, _) {
-              return Icon(
-                isList ? Icons.view_comfortable : Icons.view_list,
-                size: 24,
-                color: Colors.grey[700],
-              );
-            },
-          ),
-        )
-      ],
+      ),
     );
   }
 }
@@ -110,7 +138,7 @@ class _BikesWidget extends StatelessWidget {
           widget = GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              mainAxisExtent: 256
+              mainAxisExtent: 256,
             ),
             itemCount: bikes.length,
             itemBuilder: (ctx, index) {

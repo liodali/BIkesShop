@@ -42,10 +42,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text("Home"),
-        elevation: 0,
-      ),
+      // appBar: AppBar(
+      //   title: Text("Home"),
+      //   elevation: 0,
+      // ),
       body: NotificationListener<UserScrollNotification>(
         onNotification: (notification) {
           if (notification.direction == ScrollDirection.reverse) {
