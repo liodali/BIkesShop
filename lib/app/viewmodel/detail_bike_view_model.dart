@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 
 class DetailBikeViewModel extends ChangeNotifier {
 
-
-
   IResponse? _bikesResponse;
   Future<IResponse>? _futureBike;
 
