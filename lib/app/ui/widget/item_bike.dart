@@ -63,7 +63,7 @@ class ItemBike extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         AutoRouter.of(context).navigate(
-          DetailBike(bike: bike),
+          DetailBikeRoute(bike: bike),
         );
       },
       child: Card(

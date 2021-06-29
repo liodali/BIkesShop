@@ -4,15 +4,18 @@ import 'package:bikes_shop/app/ui/pages/home.dart';
 
 export 'routes.gr.dart';
 
-@MaterialAutoRouter(replaceInRouteName: 'Page,Route', routes: <AutoRoute>[
-  AutoRoute(
-    path: "detail-bike",
-    page: DetailBike,
-  ),
-  AutoRoute(
-    path: "store",
-    page: Home,
-    initial: true,
-  )
-])
+@MaterialAutoRouter(
+  replaceInRouteName: 'Page,Route',
+  routes: <AutoRoute>[
+    AutoRoute(
+      path: "detail-bike",
+      page: DetailBikePage,
+    ),
+    AutoRoute(
+      path: "store",
+      page: Home,
+      initial: true,
+    ),
+  ],
+)
 class $RootRouter {}

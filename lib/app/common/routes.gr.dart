@@ -17,11 +17,11 @@ class RootRouter extends _i1.RootStackRouter {
 
   @override
   final Map<String, _i1.PageFactory> pagesMap = {
-    DetailBike.name: (routeData) => _i1.MaterialPageX<dynamic>(
+    DetailBikeRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (data) {
-          final args = data.argsAs<DetailBikeArgs>();
-          return _i3.DetailBike(key: args.key, bike: args.bike);
+          final args = data.argsAs<DetailBikeRouteArgs>();
+          return _i3.DetailBikePage(key: args.key, bike: args.bike);
         }),
     Home.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
@@ -34,21 +34,22 @@ class RootRouter extends _i1.RootStackRouter {
   List<_i1.RouteConfig> get routes => [
         _i1.RouteConfig('/#redirect',
             path: '/', redirectTo: 'store', fullMatch: true),
-        _i1.RouteConfig(DetailBike.name, path: 'detail-bike'),
+        _i1.RouteConfig(DetailBikeRoute.name, path: 'detail-bike'),
         _i1.RouteConfig(Home.name, path: 'store')
       ];
 }
 
-class DetailBike extends _i1.PageRouteInfo<DetailBikeArgs> {
-  DetailBike({_i2.Key? key, required _i5.Bike bike})
+class DetailBikeRoute extends _i1.PageRouteInfo<DetailBikeRouteArgs> {
+  DetailBikeRoute({_i2.Key? key, required _i5.Bike bike})
       : super(name,
-            path: 'detail-bike', args: DetailBikeArgs(key: key, bike: bike));
+            path: 'detail-bike',
+            args: DetailBikeRouteArgs(key: key, bike: bike));
 
-  static const String name = 'DetailBike';
+  static const String name = 'DetailBikeRoute';
 }
 
-class DetailBikeArgs {
-  const DetailBikeArgs({this.key, required this.bike});
+class DetailBikeRouteArgs {
+  const DetailBikeRouteArgs({this.key, required this.bike});
 
   final _i2.Key? key;
 
