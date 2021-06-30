@@ -54,8 +54,10 @@ jobs:
           fi
         env:
            PUBKEY: ${{ secrets.PUBKEY }}
-      with:
-        tag: ${{ env.APP_VERSION }}
-        name: ${{ env.APP_VERSION }}
-        token: ${{ secrets.GITHUB_TOKEN }}
-        artifacts: 'build/app/outputs/apk/debug/*.apk,build/ios/iphoneosimulator/app.ipa
+      - name: Release Apps
+        uses: ncipollo/release-action@v1
+        with:
+            tag: ${{ env.APP_VERSION }}
+            name: ${{ env.APP_VERSION }}
+            token: ${{ secrets.GITHUB_TOKEN }}
+            artifacts: 'build/app/outputs/apk/debug/*.apk,build/ios/iphoneosimulator/app.ipa'
