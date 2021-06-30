@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
-import 'favorite_bikes.dart';
+import '../component/favorite_bikes.dart';
 
 class Home extends StatefulWidget {
   @override
