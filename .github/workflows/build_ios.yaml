@@ -38,15 +38,17 @@ jobs:
           cd ..
           zip -r app.ipa Payload
           zip -r Runner.zip Runner.app
+      - name: send first time to appetize
+        run: |
+          if ["PUBKEY" == ""]
+          then
+                 curl --http1.1 https://${{ secrets.API_TOKEN }}@api.appetize.io/v1/apps -F "file=@Runner.zip" -F "platform=ios"
+          fi
       - name: send to appetize
         run: |
           if ["PUBKEY" != ""]
           then
                  curl --http1.1 https://${{ secrets.API_TOKEN }}@api.appetize.io/v1/apps/{{end.PUBKEY}} -F "file=@Runner.zip" -F "platform=ios"
-          fi
-          if ["PUBKEY" == ""]
-          then
-                 curl --http1.1 https://${{ secrets.API_TOKEN }}@api.appetize.io/v1/apps -F "file=@Runner.zip" -F "platform=ios"
           fi
       env:
         PUBKEY: ${{ secrets.PUBKEY }}
