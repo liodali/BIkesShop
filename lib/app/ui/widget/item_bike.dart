@@ -1,7 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bikes_shop/app/ui/common/image_item_bike.dart';
 import 'package:bikes_shop/app/viewmodel/favorite_bikes_view_model.dart';
+import 'package:bikes_shop/app/viewmodel/store_view_model.dart';
 import 'package:bikes_shop/domain/models/bike.dart';
+import 'package:bikes_shop/domain/models/shop_bike.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +26,7 @@ class ItemBike extends StatelessWidget {
     final children = [
       Expanded(
         flex: isGrid ? 4 : 2,
-        child: _ImageItemBike(
+        child: ImageItemBike(
           urlImage: bike.image,
           sizeImage: sizeImage,
           isGrid: isGrid,
@@ -128,58 +131,14 @@ class ItemBike extends StatelessWidget {
                     ),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  final storeVM = context.read<StoreViewModel>();
+                  storeVM.addToShop(bike, qte: 1);
+                },
                 child: Icon(Icons.add),
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ImageItemBike extends StatelessWidget {
-  final String urlImage;
-  final double sizeImage;
-  final bool isGrid;
-
-  _ImageItemBike({
-    required this.urlImage,
-    this.sizeImage = 72,
-    this.isGrid = false,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      imageUrl: urlImage,
-      colorBlendMode: BlendMode.clear,
-      filterQuality: FilterQuality.medium,
-      height: isGrid ? null : sizeImage,
-      width: isGrid ? 256 : sizeImage,
-      imageBuilder: (ctx, imageProvider) {
-        return ClipRRect(
-          borderRadius: isGrid
-              ? BorderRadius.only(
-                  topLeft: Radius.circular(5.0),
-                  topRight: Radius.circular(5.0),
-                )
-              : BorderRadius.circular(5.0),
-          clipBehavior: Clip.hardEdge,
-          child: Image(
-            image: imageProvider,
-            fit: isGrid ? BoxFit.fill : BoxFit.cover,
-            height: isGrid ? null : sizeImage,
-            width: isGrid ? null : sizeImage,
-          ),
-        );
-      },
-      placeholder: (ctx, _) => Center(
-        child: Icon(
-          Icons.pedal_bike_sharp,
-          size: 48,
         ),
       ),
     );

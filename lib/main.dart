@@ -1,6 +1,7 @@
 import 'package:bikes_shop/app/viewmodel/bikes_view_model.dart';
 import 'package:bikes_shop/app/viewmodel/favorite_bikes_view_model.dart';
 import 'package:bikes_shop/app/viewmodel/home_view_model.dart';
+import 'package:bikes_shop/app/viewmodel/store_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,9 @@ void main() {
       ),
       ListenableProvider(
         create: (ctx) => FavoriteBikesViewModel(),
+      ),
+      ListenableProvider(
+        create: (ctx) => StoreViewModel(),
       ),
     ],
     child: MyApp(

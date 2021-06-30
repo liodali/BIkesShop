@@ -1,6 +1,6 @@
+import 'package:bikes_shop/app/common/internationalisation.dart';
 import 'package:bikes_shop/app/ui/widget/item_bike.dart';
 import 'package:bikes_shop/app/viewmodel/favorite_bikes_view_model.dart';
-import 'package:bikes_shop/domain/models/bike.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +16,9 @@ class FavoriteBikes extends HookWidget {
         return [
           SliverAppBar(
             backgroundColor: Colors.white,
-            title: Text("Favorite Bikes"),
+            title: Text(
+              BikeAppLocalizations.of(context)!.favoriteBikes,
+            ),
             toolbarHeight: 72,
             actions: [],
             pinned: true,
@@ -48,7 +50,7 @@ class FavoriteBikes extends HookWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "No Favorite Bike found for now",
+                  BikeAppLocalizations.of(context)!.noFavoriteBikesText,
                   style: TextStyle(
                     color: Colors.grey[400],
                   ),

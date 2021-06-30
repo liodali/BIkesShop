@@ -1,4 +1,5 @@
 import 'package:bikes_shop/app/ui/component/list_bikes.dart';
+import 'package:bikes_shop/app/ui/component/purchase_bikes.dart';
 import 'package:bikes_shop/app/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -68,7 +69,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           children: [
             ListBikes(),
             FavoriteBikes(),
-            ListBikes(),
+            PurchaseBikes(),
           ],
         ),
       ),
