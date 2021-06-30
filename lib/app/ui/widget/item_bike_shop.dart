@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bikes_shop/app/ui/common/favorite_button.dart';
 import 'package:bikes_shop/app/ui/common/image_item_bike.dart';
 import 'package:bikes_shop/app/viewmodel/favorite_bikes_view_model.dart';
 import 'package:bikes_shop/app/viewmodel/store_view_model.dart';
@@ -84,28 +85,8 @@ class ItemBikeShop extends StatelessWidget {
             Positioned(
               top: 0,
               right: 0,
-              child: IconButton(
-                onPressed: () {
-                  final favoriteVM = context.read<FavoriteBikesViewModel>();
-                  if (favoriteVM.existFavorite(shopBike.bike)) {
-                    favoriteVM.removeFavorites(shopBike.bike);
-                  } else {
-                    favoriteVM.addToFavorite(shopBike.bike);
-                  }
-                },
-                icon: Consumer<FavoriteBikesViewModel>(
-                  builder: (ctx, favoriteVM, _) {
-                    return Icon(
-                      favoriteVM.existFavorite(shopBike.bike)
-                          ? Icons.bookmark
-                          : Icons.bookmark_border_outlined,
-                      color: favoriteVM.existFavorite(shopBike.bike)
-                          ? Theme.of(context).primaryColor
-                          : Colors.black,
-                    );
-                  },
-                ),
-                iconSize: 24,
+              child: FavoriteButtonWidget(
+                bike: shopBike.bike,
               ),
             ),
             Positioned(

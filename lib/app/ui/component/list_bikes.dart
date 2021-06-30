@@ -1,5 +1,5 @@
 import 'package:bikes_shop/app/common/internationalisation.dart';
-import 'package:bikes_shop/app/common/search_text_field.dart';
+import 'package:bikes_shop/app/ui/common/search_text_field.dart';
 import 'package:bikes_shop/app/ui/common/filter_frame_price_range.dart';
 import 'package:bikes_shop/domain/common/utilities.dart';
 import 'package:bikes_shop/app/ui/common/custom_tab_filter.dart';

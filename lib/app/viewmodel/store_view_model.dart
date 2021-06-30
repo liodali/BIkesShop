@@ -7,6 +7,13 @@ class StoreViewModel extends ChangeNotifier {
 
   List<ShopBike> get shopBikes => _shopBikes;
 
+  String get totalPrice => _shopBikes.isNotEmpty
+      ? _shopBikes
+          .map((e) => e.bike.price * e.quantity)
+          .reduce((value, element) => value + element)
+          .toStringAsFixed(2)
+      : "0";
+
   bool existInShop(ShopBike shopBike) {
     return _shopBikes
         .where(

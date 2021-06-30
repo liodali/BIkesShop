@@ -22,6 +22,8 @@ class BikeAppLocalizations {
       "favorite_bikes": "Your Favorite Bikes",
       "no_purchase_bikes_text": "No  Bike in the Store  for now",
       "no_favorite_bikes_text": "No Favorite Bike found for now",
+      'purchase_price_text': "Price",
+      'purchase_checkout_text': "Checkout",
     },
     'fr': {
       'title_app': 'eBike Store',
@@ -33,6 +35,9 @@ class BikeAppLocalizations {
       'favorite_bikes': "Vos Bikes Favories",
       'no_purchase_bikes_text': "Aucune  Bike dans panier ",
       'no_favorite_bikes_text': "Aucune Favorite Bike ",
+      'purchase_price_text': "Montant Total ",
+      'purchase_checkout_text': "Commande",
+
     },
   };
 
@@ -45,6 +50,8 @@ class BikeAppLocalizations {
   String get favoriteBikes => _localizedValues[locale.languageCode]!['favorite_bikes']!;
   String get noPurchaseBikesText => _localizedValues[locale.languageCode]!['no_purchase_bikes_text']!;
   String get noFavoriteBikesText => _localizedValues[locale.languageCode]!['no_favorite_bikes_text']!;
+  String get purchasePriceText => _localizedValues[locale.languageCode]!['purchase_price_text']!;
+  String get purchaseCheckoutText => _localizedValues[locale.languageCode]!['purchase_checkout_text']!;
 }
 
 class AppLocalizationsDelegate

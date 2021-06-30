@@ -19,7 +19,43 @@ class PurchaseBikes extends HookWidget {
               BikeAppLocalizations.of(context)!.purchaseBikes,
             ),
             toolbarHeight: 72,
-            actions: [],
+            actions: [
+              TextButton(
+                child: Text(
+                    BikeAppLocalizations.of(context)!.purchaseCheckoutText),
+                onPressed: () {},
+              )
+            ],
+            primary: true,
+            bottom: PreferredSize(
+              child: Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: Text(
+                        BikeAppLocalizations.of(context)!.purchasePriceText,
+                      ),
+                    ),
+                    Consumer<StoreViewModel>(
+                      builder: (ctx, storeVM, _) {
+                        final price = storeVM.totalPrice;
+                        return Text(
+                          "$price\$",
+                          style: TextStyle(
+                            color:
+                                price == "0" ? Colors.grey[400] : Colors.black,
+                            fontSize: price == "0" ? 17 : 15,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              preferredSize: Size.fromHeight(64),
+            ),
             pinned: true,
             floating: false,
             snap: false,
