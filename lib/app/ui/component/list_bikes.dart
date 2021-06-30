@@ -26,7 +26,6 @@ class ListBikes extends HookWidget {
     useEffect(() {
       bikeViewModel.initBikes();
     }, const []);
-    // final state = useState();
     return RefreshIndicator(
       notificationPredicate: (scrollNotif) {
         return true;
@@ -67,25 +66,19 @@ class ListBikes extends HookWidget {
                         horizontal: 12.0,
                       ),
                       child: Row(
+                        mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          _FilterPriceWidget(),
-                          InkWell(
-                            onTap: () {},
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 3.0, horizontal: 12.0),
-                              child: Row(
-                                children: [
-                                  Text("filter"),
-                                  Icon(
-                                    Icons.filter_alt,
-                                    size: 24,
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
+                          Flexible(
+                            flex: 2,
+                            fit: FlexFit.loose,
+                            child: _FilterPriceWidget(),
+                          ),
+                          Flexible(
+                            fit: FlexFit.loose,
+                            flex: 2,
+                            child: _FilterFramePriceRangeWidget(),
+                          ),
                         ],
                       ),
                     ),
@@ -96,12 +89,8 @@ class ListBikes extends HookWidget {
                       child: CustomTabFilter(
                         tabs: categories,
                         selectedCategory: (category) async {
-                          if (category == categories.first) {
-                            bikeViewModel.retrieveBikes();
-                          } else {
-                            bikeViewModel.saveCategory(category);
-                            bikeViewModel.retrieveBikesByFilter();
-                          }
+                          bikeViewModel.saveCategory(category);
+                          bikeViewModel.retrieveBikesByFilter();
                           // state.value = bikeViewModel.future!;
                         },
                       ),
@@ -121,6 +110,7 @@ class ListBikes extends HookWidget {
               selector: (ctx, bikesViewModel) => bikeViewModel.future!,
               builder: (ctx, future, _) {
                 return MyFutureBuilderComponent<List<Bike>>(
+                  key: Key(bikeViewModel.filter.toQuery()),
                   future: bikeViewModel.future!,
                   builder: (bikes) {
                     return _BikesWidget(
@@ -206,12 +196,35 @@ class _BikesWidget extends StatelessWidget {
   }
 }
 
+class _FilterFramePriceRangeWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {},
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 3.0, horizontal: 12.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Filter"),
+            Icon(
+              Icons.filter_alt,
+              size: 24,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _FilterPriceWidget extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final selectedState = useState(false);
     final ascFilter = useState(false);
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         if (!selectedState.value) selectedState.value = true;
         if (selectedState.value) ascFilter.value = !ascFilter.value;
@@ -235,6 +248,8 @@ class _FilterPriceWidget extends HookWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 BikeAppLocalizations.of(context)!.priceText,
