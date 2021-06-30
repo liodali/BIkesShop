@@ -1,5 +1,4 @@
 import 'package:bikes_shop/app/common/locator.dart';
-import 'package:bikes_shop/app/common/utilities.dart';
 import 'package:bikes_shop/core/interactor/get_all_bikes_use_case.dart';
 import 'package:bikes_shop/domain/models/filter.dart';
 import 'package:bikes_shop/domain/models/response.dart';
@@ -45,12 +44,16 @@ class BikesViewModel extends ChangeNotifier {
   }
 
   void saveCategory(String category) {
-    _filter.category = category;
+    Filter filterCategory = _filter.filters[FilterBikes.categoryLabel]!;
+    filterCategory.value = category;
+    _filter.filters[FilterBikes.categoryLabel] = filterCategory;
     notifyListeners();
   }
 
-  void priceSortChange(String filterPrice) {
-    _filter.priceFilter = filterPrice;
+  void priceSortChange(String priceSort) {
+    Filter filterPrice = _filter.filters[FilterBikes.priceLabel]!;
+    filterPrice.value = priceSort;
+    _filter.filters[FilterBikes.priceLabel] = filterPrice;
     notifyListeners();
   }
 

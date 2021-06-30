@@ -24,9 +24,9 @@ class MyFutureBuilderComponent<T> extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _hookFuture = useMemoized(() => future, [key]);
     return HookBuilder(
       builder: (ctx) {
+        final _hookFuture = useMemoized(() => future, [key]);
         final snap = useFuture(_hookFuture);
         if (snap.connectionState == ConnectionState.waiting) {
           return this.loading ?? LoadingWidget();

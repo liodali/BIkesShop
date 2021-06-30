@@ -1,4 +1,5 @@
 import 'package:bikes_shop/app/viewmodel/bikes_view_model.dart';
+import 'package:bikes_shop/domain/models/filter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -17,9 +18,10 @@ class CustomTabFilter extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final bikesViewModel = Provider.of<BikesViewModel>(context, listen: false);
-    final tabsSelected = useState(bikesViewModel.filter.category != tabs.first
-        ? bikesViewModel.filter.category
-        : tabs.first);
+    String category = bikesViewModel
+        .filter.filters[FilterBikes.categoryLabel]!.value as String;
+    final tabsSelected =
+        useState(category != tabs.first ? category : tabs.first);
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,

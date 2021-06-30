@@ -1,6 +1,6 @@
 import 'package:bikes_shop/app/common/internationalisation.dart';
 import 'package:bikes_shop/app/common/search_text_field.dart';
-import 'package:bikes_shop/app/common/utilities.dart';
+import 'package:bikes_shop/domain/common/utilities.dart';
 import 'package:bikes_shop/app/ui/common/custom_tab_filter.dart';
 import 'package:bikes_shop/app/ui/common/my_future_builder_component.dart';
 import 'package:bikes_shop/app/ui/widget/item_bike.dart';
@@ -31,7 +31,7 @@ class ListBikes extends HookWidget {
         return true;
       },
       child: NestedScrollView(
-        physics: ClampingScrollPhysics(),
+        physics: NeverScrollableScrollPhysics(),
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
             SliverAppBar(
@@ -77,7 +77,19 @@ class ListBikes extends HookWidget {
                           Flexible(
                             fit: FlexFit.loose,
                             flex: 2,
-                            child: _FilterFramePriceRangeWidget(),
+                            child: _FilterFramePriceRangeWidget(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (ctx) {
+                                    return WillPopScope(
+                                      child: Container(),
+                                      onWillPop: () async => false,
+                                    );
+                                  },
+                                );
+                              },
+                            ),
                           ),
                         ],
                       ),
@@ -104,26 +116,22 @@ class ListBikes extends HookWidget {
             )
           ];
         },
-        body: Stack(
-          children: [
-            Selector<BikesViewModel, Future<IResponse>>(
-              selector: (ctx, bikesViewModel) => bikeViewModel.future!,
-              builder: (ctx, future, _) {
-                return MyFutureBuilderComponent<List<Bike>>(
-                  key: Key(bikeViewModel.filter.toQuery()),
-                  future: bikeViewModel.future!,
-                  builder: (bikes) {
-                    return _BikesWidget(
-                      bikes: bikes,
-                    );
-                  },
-                  mapTo: (response) {
-                    return (response as BikesResponse).data!;
-                  },
+        body: Selector<BikesViewModel, Future<IResponse>>(
+          selector: (ctx, bikesViewModel) => bikeViewModel.future!,
+          builder: (ctx, future, _) {
+            return MyFutureBuilderComponent<List<Bike>>(
+              key: Key(bikeViewModel.filter.toQuery()),
+              future: bikeViewModel.future!,
+              builder: (bikes) {
+                return _BikesWidget(
+                  bikes: bikes,
                 );
               },
-            )
-          ],
+              mapTo: (response) {
+                return (response as BikesResponse).data!;
+              },
+            );
+          },
         ),
       ),
       onRefresh: () async {
@@ -167,6 +175,7 @@ class _BikesWidget extends StatelessWidget {
         var widget = child!;
         if (!isList) {
           widget = GridView.builder(
+            primary: false,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               mainAxisExtent: 256,
@@ -183,6 +192,7 @@ class _BikesWidget extends StatelessWidget {
         return widget;
       },
       child: ListView.builder(
+        primary: false,
         itemBuilder: (ctx, index) {
           return ItemBike(
             bike: bikes[index],
@@ -197,10 +207,17 @@ class _BikesWidget extends StatelessWidget {
 }
 
 class _FilterFramePriceRangeWidget extends StatelessWidget {
+  final Function() onTap;
+
+  const _FilterFramePriceRangeWidget({
+    Key? key,
+    required this.onTap,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 3.0, horizontal: 12.0),
         child: Row(
