@@ -82,10 +82,17 @@ class ListBikes extends HookWidget {
                               onTap: () {
                                 showModalBottomSheet(
                                   context: context,
+                                  useRootNavigator: true,
+                                  enableDrag: false,
+                                  isDismissible: true,
                                   builder: (ctx) {
-                                    return WillPopScope(
-                                      child: FilterFramePriceRange(),
-                                      onWillPop: () async => true,
+                                    return Builder(
+                                      builder: (_) {
+                                        return WillPopScope(
+                                          child: FilterFramePriceRange(),
+                                          onWillPop: () async => true,
+                                        );
+                                      },
                                     );
                                   },
                                 );

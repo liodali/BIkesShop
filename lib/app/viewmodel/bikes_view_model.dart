@@ -50,6 +50,22 @@ class BikesViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void saveFrameSize(String frame) {
+    Filter filterFrame = _filter.filters[FilterBikes.frameSizeLabel]!;
+    filterFrame.value = frame;
+    _filter.filters[FilterBikes.frameSizeLabel] = filterFrame;
+    notifyListeners();
+  }
+
+  void savePriceRange(List<int> priceRange) {
+    Filter filterPriceRange = _filter.filters[FilterBikes.priceRangeLabel]!;
+    filterPriceRange.value = priceRange
+        .map((e) => e.toString())
+        .reduce((value, element) => "$value,$element");
+    _filter.filters[FilterBikes.priceRangeLabel] = filterPriceRange;
+    notifyListeners();
+  }
+
   void priceSortChange(String priceSort) {
     Filter filterPrice = _filter.filters[FilterBikes.priceLabel]!;
     filterPrice.value = priceSort;

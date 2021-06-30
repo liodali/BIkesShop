@@ -1,20 +1,36 @@
+import 'package:bikes_shop/app/common/internationalisation.dart';
+import 'package:bikes_shop/app/viewmodel/bikes_view_model.dart';
+import 'package:bikes_shop/domain/models/filter.dart';
 import 'package:checkbox_grouped/checkbox_grouped.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:provider/provider.dart';
 
 class FilterFramePriceRange extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    final bikeVM = Provider.of<BikesViewModel>(context, listen: false);
     final stateController = useState(GroupController(
       isMultipleSelection: false,
+      initSelectedItem: (bikeVM
+                  .filter.filters[FilterBikes.frameSizeLabel]!.value as String)
+              .isNotEmpty
+          ? [bikeVM.filter.filters[FilterBikes.frameSizeLabel]!.value as String]
+          : [],
     ));
-    final stateValueRange = useState(RangeValues(400, 600));
+    final initValueRanges = getPriceRangeFromFilter(bikeVM);
+    final stateValueRange = useState(RangeValues(
+      initValueRanges.first.toDouble(),
+      initValueRanges.last.toDouble(),
+    ));
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Expanded(
+        Flexible(
+          flex: 1,
           child: SingleChildScrollView(
             child: Column(
-              mainAxisSize: MainAxisSize.max,
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
@@ -34,11 +50,13 @@ class FilterFramePriceRange extends HookWidget {
                     "16-17 inch",
                     "17-18 inch",
                     "18-19 inch",
+                    "19-21 inch",
                   ],
                   values: [
                     "16,17",
                     "17,18",
                     "18,19",
+                    "19,21",
                   ],
                   checkFirstElement: false,
                   onItemSelected: (frame) {},
@@ -95,7 +113,7 @@ class FilterFramePriceRange extends HookWidget {
                       Positioned(
                         bottom: 0,
                         right: 0,
-                        child: Text("900"),
+                        child: Text("950"),
                       ),
                     ],
                   ),
@@ -105,16 +123,57 @@ class FilterFramePriceRange extends HookWidget {
           ),
         ),
         Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                stateValueRange.value = RangeValues(200, 950);
+                stateController.value = GroupController(
+                  isMultipleSelection: false,
+                );
+              },
               child: Text(
-                MaterialLocalizations.of(context).closeButtonLabel,
+                BikeAppLocalizations.of(context)!.resetText,
+              ),
+            ),
+            SizedBox(
+              width: 25,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final bikeVM =
+                    Provider.of<BikesViewModel>(context, listen: false);
+                String? selectedFrame =
+                    stateController.value.selectedItem as String?;
+                bikeVM
+                    .saveFrameSize(selectedFrame != null ? selectedFrame : "");
+                bikeVM.savePriceRange([
+                  stateValueRange.value.start.toInt(),
+                  stateValueRange.value.end.toInt(),
+                ]);
+
+                bikeVM.retrieveBikesByFilter();
+                Navigator.pop(context);
+              },
+              child: Text(
+                BikeAppLocalizations.of(context)!.applyText,
+                style: TextStyle(color: Colors.white),
               ),
             ),
           ],
         )
       ],
     );
+  }
+
+  List<int> getPriceRangeFromFilter(BikesViewModel bikeVM) {
+    return (bikeVM.filter.filters[FilterBikes.priceRangeLabel]!.value as String)
+            .isNotEmpty
+        ? (bikeVM.filter.filters[FilterBikes.priceRangeLabel]!.value as String)
+            .split(",")
+            .map((e) => int.parse(e))
+            .toList()
+        : [200, 950];
   }
 }
