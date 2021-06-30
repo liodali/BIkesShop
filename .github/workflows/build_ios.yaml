@@ -26,6 +26,8 @@ jobs:
         run: flutter pub get
       - name: Run Tests
         run: flutter test
+      - name: set icon
+        run : flutter pub run flutter_launcher_icons:main
       - name: Build Android App
         run: flutter build apk --debug
       - name: Build iOS App
