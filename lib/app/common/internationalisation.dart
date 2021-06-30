@@ -15,15 +15,18 @@ class BikeAppLocalizations {
     'en': {
       'title_app': 'Bike Shopping',
       'loading_text': 'Loading ...',
+      'price_text': "Price",
     },
     'fr': {
       'title_app': 'eBike Store',
       'loading_text': 'Changement ...',
+      'price_text': "Prix",
     },
   };
 
   String get titleApp => _localizedValues[locale.languageCode]!['title_app']!;
   String get loadingText => _localizedValues[locale.languageCode]!['loading_text']!;
+  String get priceText => _localizedValues[locale.languageCode]!['price_text']!;
 }
 
 class AppLocalizationsDelegate

@@ -1,3 +1,4 @@
+import 'package:bikes_shop/app/common/internationalisation.dart';
 import 'package:bikes_shop/app/common/search_text_field.dart';
 import 'package:bikes_shop/app/common/utilities.dart';
 import 'package:bikes_shop/app/ui/common/custom_tab_filter.dart';
@@ -48,8 +49,8 @@ class ListBikes extends HookWidget {
                     selector: (ctx, viewModel) => viewModel.isList,
                     builder: (ctx, isList, _) {
                       return Icon(
-                        isList ? Icons.view_comfortable : Icons.view_list,
-                        size: 24,
+                        isList ? Icons.grid_view : Icons.view_list,
+                        size: 32,
                         color: Colors.grey[700],
                       );
                     },
@@ -57,10 +58,37 @@ class ListBikes extends HookWidget {
                 )
               ],
               bottom: PreferredSize(
-                preferredSize: Size.fromHeight(56.0),
+                preferredSize: Size.fromHeight(72.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          _FilterPriceWidget(),
+                          InkWell(
+                            onTap: () {},
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 3.0, horizontal: 12.0),
+                              child: Row(
+                                children: [
+                                  Text("filter"),
+                                  Icon(
+                                    Icons.filter_alt,
+                                    size: 24,
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                     Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: 12.0,
@@ -71,8 +99,8 @@ class ListBikes extends HookWidget {
                           if (category == categories.first) {
                             bikeViewModel.retrieveBikes();
                           } else {
-                            String query = "category=$category";
-                            bikeViewModel.retrieveBikesByFilter(query);
+                            bikeViewModel.saveCategory(category);
+                            bikeViewModel.retrieveBikesByFilter();
                           }
                           // state.value = bikeViewModel.future!;
                         },
@@ -82,30 +110,34 @@ class ListBikes extends HookWidget {
                 ),
               ),
               pinned: true,
-              floating: true,
+              floating: false,
               snap: false,
             )
           ];
         },
-        body: Selector<BikesViewModel, Future<IResponse>>(
-          selector: (ctx, bikesViewModel) => bikeViewModel.future!,
-          builder: (ctx, future, _) {
-            return MyFutureBuilderComponent<List<Bike>>(
-              future: bikeViewModel.future!,
-              builder: (bikes) {
-                return _BikesWidget(
-                  bikes: bikes,
+        body: Stack(
+          children: [
+            Selector<BikesViewModel, Future<IResponse>>(
+              selector: (ctx, bikesViewModel) => bikeViewModel.future!,
+              builder: (ctx, future, _) {
+                return MyFutureBuilderComponent<List<Bike>>(
+                  future: bikeViewModel.future!,
+                  builder: (bikes) {
+                    return _BikesWidget(
+                      bikes: bikes,
+                    );
+                  },
+                  mapTo: (response) {
+                    return (response as BikesResponse).data!;
+                  },
                 );
               },
-              mapTo: (response) {
-                return (response as BikesResponse).data!;
-              },
-            );
-          },
+            )
+          ],
         ),
       ),
       onRefresh: () async {
-        bikeViewModel.retrieveBikes();
+        bikeViewModel.retrieveBikesByFilter();
         //state.value = bikeViewModel.future!;
       },
     );
@@ -118,7 +150,7 @@ class _HeaderBikeSearch extends StatelessWidget {
     return SizedBox(
       height: 56,
       child: Padding(
-        padding: EdgeInsets.only(bottom: 12.0),
+        padding: EdgeInsets.only(bottom: 8.0, top: 5.0),
         child: SearchTextField(
           radius: 24.0,
           textController: TextEditingController(),
@@ -171,16 +203,65 @@ class _BikesWidget extends StatelessWidget {
         addAutomaticKeepAlives: true,
       ),
     );
-    // return SliverList(
-    //   delegate: SliverChildBuilderDelegate(
-    //     (ctx, index) {
-    //       return ItemBike(
-    //         bike: bikes[index],
-    //       );
-    //     },
-    //     addAutomaticKeepAlives: true,
-    //     childCount: bikes.length,
-    //   ),
-    // );
+  }
+}
+
+class _FilterPriceWidget extends HookWidget {
+  @override
+  Widget build(BuildContext context) {
+    final selectedState = useState(false);
+    final ascFilter = useState(false);
+    return GestureDetector(
+      onTap: () {
+        if (!selectedState.value) selectedState.value = true;
+        if (selectedState.value) ascFilter.value = !ascFilter.value;
+        if (selectedState.value) {
+          String filter = "asc";
+          if (!ascFilter.value) {
+            filter = "desc";
+          }
+          final bikesVM = context.read<BikesViewModel>();
+          bikesVM.priceSortChange(filter);
+          bikesVM.retrieveBikesByFilter();
+        }
+      },
+      onDoubleTap: () {
+        selectedState.value = false;
+        final bikesVM = context.read<BikesViewModel>();
+        bikesVM.priceSortChange("");
+        bikesVM.retrieveBikesByFilter();
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            children: [
+              Text(
+                BikeAppLocalizations.of(context)!.priceText,
+              ),
+              Icon(
+                !selectedState.value
+                    ? Icons.import_export_outlined
+                    : ascFilter.value
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                size: 16,
+              ),
+            ],
+          ),
+          if (selectedState.value)
+            Container(
+                width: 35,
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      width: 3.0,
+                      color: Colors.black,
+                    ),
+                  ),
+                ))
+        ],
+      ),
+    );
   }
 }
