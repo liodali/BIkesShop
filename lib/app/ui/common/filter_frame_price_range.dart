@@ -162,7 +162,7 @@ class FilterFramePriceRange extends HookWidget {
               ),
             ),
           ],
-        )
+        ),
       ],
     );
   }

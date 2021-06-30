@@ -46,10 +46,22 @@ class Filter {
 
 class FilterBikes {
   Map<String, Filter> filters = {
-    "category": Filter(name: "category", value: "All"),
-    "price": Filter(name: "price", value: ""),
-    "priceRange": Filter(name: "priceRange", value: []),
-    "frameSize": Filter(name: "frameSize", value: ""),
+    "category": Filter(
+      name: "category",
+      value: "All",
+    ),
+    "price": Filter(
+      name: "price",
+      value: "",
+    ),
+    "priceRange": Filter(
+      name: "priceRange",
+      value: "",
+    ),
+    "frameSize": Filter(
+      name: "frameSize",
+      value: "",
+    ),
   };
 
   static const String categoryLabel = "category";
