@@ -2,7 +2,7 @@
     package="dali.hamza.bikes_shop">
    <application
         android:label="bikes_shop"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
