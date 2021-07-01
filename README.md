@@ -4,7 +4,7 @@ Shopping Flutter application for bikes
 
 ## Getting Started
 
-<img src="https://github.com/liodali/BIkesShop/blob/master/screenshot/bikesShop.gif?raw=true" alt="Bike catalog app"><br>
+<img src="https://github.com/liodali/BIkesShop/blob/main/screenshot/bikesShop.gif?raw=true" alt="Bike catalog app"><br>
 
 
 ## Build
