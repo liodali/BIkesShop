@@ -4,13 +4,31 @@ Shopping Flutter application for bikes
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Build
+* I used Flutter 2.2.2
+1) Android
+> flutter build apk --release
+2) iOS
+> flutter build ios --no-codesign
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+##### In this project, we implement the  clean architecture
+* we have 3 layer:
+
+    * <srong>App module </string>  : This module contains all  the code related to the UI/Presentation layer such as widget,route,localization,DI  and contain viewModel
+    * <srong>Core</string> : holds all concrete implementations of our repositories,usecaes and other data sources like  network
+    * <srong>Domain module </string>  : contain all interfaces of repositories  and  classes
+
+
+
+> I used getIt as dependency injection for this project
+
+> I used dio for http calls 
+
+> I used FlutterHook and Provider for reactive UI
+
+> I used auto_route to routing navigation
+
+> I build RestApi using Ktor 
