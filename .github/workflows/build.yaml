@@ -26,6 +26,8 @@ jobs:
         run: flutter pub get
       - name: Run Tests
         run: flutter test
+      - name: set splash screen
+        run : flutter pub run flutter_native_splash:create
       - name: set icon
         run : flutter pub run flutter_launcher_icons:main
       - name: Build Android App
@@ -40,22 +42,22 @@ jobs:
           cd ..
           zip -r app.ipa Payload
           zip -r Runner.zip Runner.app
-      - name: send first time to appetize
-        run: |
-          if ["PUBKEY" == ""]
-          then
-                 curl --http1.1 https://${{ secrets.API_TOKEN }}@api.appetize.io/v1/apps -F "file=@Runner.zip" -F "platform=ios"
-          fi
-        env:
-          PUBKEY: ${{ secrets.PUBKEY }}
-      - name: send to appetize
-        run: |
-          if ["PUBKEY" != ""]
-          then
-                 curl --http1.1 https://${{ secrets.API_TOKEN }}@api.appetize.io/v1/apps/{{end.PUBKEY}} -F "file=@Runner.zip" -F "platform=ios"
-          fi
-        env:
-           PUBKEY: ${{ secrets.PUBKEY }}
+      # - name: send first time to appetize
+      #  run: |
+      #    if ["$PUBKEY" == ""]
+      #    then
+      #           curl --http1.1 https://${{ secrets.API_TOKEN }}@api.appetize.io/v1/apps -F "file=@Runner.zip" -F "platform=ios"
+      #    fi
+      #  env:
+      #    PUBKEY: ${{ secrets.PUBKEY }}
+      #- name: send to appetize
+      #  run: |
+      #    if ["$PUBKEY" != ""]
+      #    then
+      #           curl --http1.1 https://${{ secrets.API_TOKEN }}@api.appetize.io/v1/apps/{{end.PUBKEY}} -F "file=@Runner.zip" -F "platform=ios"
+      #    fi
+      #  env:
+      #     PUBKEY: ${{ secrets.PUBKEY }}
       - name: Release Apps
         uses: ncipollo/release-action@v1
         with:
